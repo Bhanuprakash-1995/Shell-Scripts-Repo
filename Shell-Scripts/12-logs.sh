@@ -10,7 +10,7 @@ N="\e[0m"
 
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>LOGFILE
+echo "Script started executing at $TIMESTAMP" &>>"/tmp/$0-$TIMESTAMP.log"
 
 VALIDATE() {
     if [ $1 -ne 0 ]; then
@@ -28,10 +28,10 @@ else
     echo -e "$G Your are root user. $N"
 fi
 
-yum install mysql -y &>>LOGFILE
+yum install mysql -y &>>"/tmp/$0-$TIMESTAMP.log"
 
 VALIDATE $? "MySql"
 
-yum install git -y &>>LOGFILE
+yum install git -y &>>"/tmp/$0-$TIMESTAMP.log"
 
 VALIDATE $? "Git"
