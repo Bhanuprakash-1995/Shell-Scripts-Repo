@@ -2,7 +2,7 @@
 
 ID=$(id -u)
 TIMESTAMP=$(date +%F_%H)
-LOGFILE="/tmp/$0_$TIMESTAMP.log"
+LOGFILE="/home/centos/tmp/$0_$TIMESTAMP.log"
 echo "Script Name: $0"
 
 VALIDATE() {
