@@ -2,6 +2,15 @@
 
 ID=$(id -u)
 
+VALIDATE() {
+    if [ $? -ne 0 ]; then
+        echo "Installating failed"
+        exit 1
+    else
+        echo "Installating Successfull"
+    fi
+}
+
 if [ $ID -ne 0 ]; then
     echo "Error:: Please run the script with root user."
     exit 1
@@ -11,9 +20,6 @@ fi
 
 yum install mysql -y
 
-if [ $? -ne 0 ]; then
-    echo "Installating MYSQL failed"
-    exit 1
-else
-    echo "Installating MYSQL Successfull"
-fi
+VALIDATE
+
+yum install git -y
