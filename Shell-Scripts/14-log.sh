@@ -10,7 +10,7 @@ N="\e[0m"
 
 LOG_PATH="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"/tmp/$0-$TIMESTAMP.log"
+echo "Script started executing at $TIMESTAMP" &>>LOG_PATH
 
 VALIDATE() {
     if [ $1 -ne 0 ]; then
@@ -28,10 +28,10 @@ else
     echo -e "$G Your are root user. $N"
 fi
 
-yum install mysql -y &>>"/tmp/$0-$TIMESTAMP.log"
+yum install mysql -y &>>LOG_PATH
 
 VALIDATE $? "MySql"
 
-yum install git -y &>>"/tmp/$0-$TIMESTAMP.log"
+yum install git -y &>>LOG_PATH
 
 VALIDATE $? "Git"
