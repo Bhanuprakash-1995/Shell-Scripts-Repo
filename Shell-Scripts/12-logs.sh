@@ -2,6 +2,8 @@
 
 ID=$(id -u)
 
+echo "Script Name: $0"
+
 VALIDATE() {
     if [ $1 -ne 0 ]; then
         echo "Error:: $2 Installating failed"
