@@ -1,10 +1,9 @@
 #!/bin/bash
 
-number1=$1
-number2=$2
+number=$1
 
-if [ number1 -gt number2 ]; then
-    echo "Number1 is greater then Number2"
+if [ $number -gt 300 ]; then
+    echo "Number is greater then 300"
 else
-    echo "Number1 is less then Number2"
+    echo "Number is less then 300"
 fi
