@@ -9,6 +9,7 @@ VALIDATE() {
     else
         echo "Installating $2 Successfull"
     fi
+    echo "$3"
 }
 
 if [ $ID -ne 0 ]; then
@@ -24,4 +25,4 @@ VALIDATE $? "MySql"
 
 yum install git -y
 
-VALIDATE $? "Git"
+VALIDATE $? "Git" "GIt Installed Completly"

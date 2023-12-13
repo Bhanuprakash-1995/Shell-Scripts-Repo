@@ -1,0 +1,107 @@
+---
+- name: Web Servers Setup
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Httpd Installation
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+
+    - name: Start Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: yes
+
+- name : DBserver Setup
+  hosts: dbservers
+  become: yes
+  vars:
+    dbname: electric
+    dbuser: current
+    dbpass: admin
+  tasks:
+
+    - debug:
+        msg: "The DB name is {{dbname}}"
+
+    - debug:
+        var: dbuser
+
+    - name: Install mariadb-server
+      ansible.builtin.yum:
+        name: mariadb-server
+        state: present
+
+    - name: Start Mariabd Service
+      ansible.builtin.service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+
+    - name: Web Servers Setup
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Httpd Installation
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+
+    - name: Start Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: yes
+
+- name: DBServers Setup
+  hosts: dbservers
+  become: yes
+  vars:
+    dbname: electric
+    dbuser: current
+    dbpass: admin
+  tasks:
+    - debug:
+        msg: "The DB name is {{dbname}}"
+
+    - debug:
+        var: dbuser
+
+    - name: Install mariadb-server
+      ansible.builtin.yum:
+        name: mariadb-server
+        state: present
+
+    - name: Start Mariabd Service
+      ansible.builtin.service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    - name: Install pymysql
+      ansible.builtin.yum:
+        name: python3-PyMySQL
+        state: present
+
+
+    - name: Create a new database
+      community.mysql.mysql_db:
+        name: "{{dbname}}"
+        state: present
+        login_unix_socket: /var/lib/mysql/mysql.sock
+
+    - name: Create database user
+      community.mysql.mysql_user:
+        name: "{{dbuser}}"
+        password: "{{dbpass}}"
+        priv: '*.*:ALL'
+        state: present
+        login_unix_socket: /var/lib/mysql/mysql.sock
+      register: dbout
+
+    - name: print dbout varibale
+      debug:
+        var: dbout
