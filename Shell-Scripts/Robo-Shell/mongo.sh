@@ -4,6 +4,7 @@
 # Author: Bhanuprakash S
 # Server name: MongoDB Server
 # Application Name: Roboshop
+# Devolepment Data: 14-12-2024
 ######################################################
 
 ID=$(id -u)
@@ -15,7 +16,7 @@ Y="\e[33m"
 N="\e[0m"
 
 #LOG_PATH="/tmp/$0-$TIMESTAMP.log"
-#C:\Users\Bhanu Prakash\OneDrive\Documents\My-Reops\Shell-Scripts\Robo-Shell\mongo.repo
+
 echo "Script started executing at $TIMESTAMP" &>>"/tmp/$0-$TIMESTAMP.log"
 
 if [ "$ID" -ne 0 ]; then
