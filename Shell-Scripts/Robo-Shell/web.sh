@@ -34,21 +34,31 @@ VALIDATE() {
     fi
 }
 
+# shellcheck disable=SC2129
 echo "Installing the nginx" &>>"$LOGFILE"
 
 dnf install nginx -y &>>"$LOGFILE"
 
+VALIDATE $? "Install nginx"
+
+# shellcheck disable=SC2129
 echo "Enabling the nginx" &>>"$LOGFILE"
 
 systemctl enable nginx &>>"$LOGFILE"
+
+VALIDATE $? "Enable nginx"
 
 echo "Start the nginx" &>>"$LOGFILE"
 
 systemctl start nginx &>>"$LOGFILE"
 
+VALIDATE $? "Start nginx"
+
 echo "Removind all default html" &>>"$LOGFILE"
 
 rm -rf /usr/share/nginx/html/*
+
+VALIDATE $? "Removing  all default html"
 
 echo "Download the frontend content" &>>"$LOGFILE"
 
@@ -60,13 +70,18 @@ cd /usr/share/nginx/html || exit
 
 echo "Unzipping the /tmp/web.zip" &>>"$LOGFILE"
 
-unzip /tmp/web.zip
+unzip -o /tmp/web.zip
 
-# shellcheck disable=SC2129
+VALIDATE $? "Unzipping all Roboshop html file"
+
 echo "Coping the reverse proxy file to /etc/nginx/" &>>"$LOGFILE"
 
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>"$LOGFILE"
 
+VALIDATE $? "Coping the reverse proxy configuration file"
+
 echo "reStarting nginx server " &>>"$LOGFILE"
 
 systemctl restart nginx &>>"$LOGFILE"
+
+VALIDATE $? "reStart nginx server"

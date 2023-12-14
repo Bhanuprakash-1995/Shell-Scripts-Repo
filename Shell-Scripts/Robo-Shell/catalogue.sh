@@ -47,6 +47,7 @@ dnf install nodejs -y &>>"$LOGFILE"
 VALIDATE $? "Installing NodeJS:18"
 
 id roboshop
+
 # shellcheck disable=SC2181
 if [ $? -ne 0 ]; then
     useradd roboshop
@@ -73,7 +74,6 @@ npm install &>>"$LOGFILE"
 
 VALIDATE $? "Installing dependencies"
 
-# use absolute, because catalogue.service exists there
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/catalogue.service /etc/systemd/system/catalogue.service &>>"$LOGFILE"
 
 VALIDATE $? "Copying catalogue service file"
