@@ -61,6 +61,7 @@ cd /usr/share/nginx/html || exit
 echo "Unzipping the /tmp/web.zip" &>>"$LOGFILE"
 
 unzip /tmp/web.zip
+
 # shellcheck disable=SC2129
 echo "Coping the reverse proxy file to /etc/nginx/" &>>"$LOGFILE"
 
