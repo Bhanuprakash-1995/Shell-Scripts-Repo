@@ -34,6 +34,27 @@ VALIDATE() {
     fi
 }
 
+dnf module disable nodejs -y &>>"$LOGFILE"
+
+VALIDATE $? "Disabling current NodeJS"
+
+dnf module enable nodejs:18 -y &>>"$LOGFILE"
+
+VALIDATE $? "Enabling NodeJS:18"
+
+dnf install nodejs -y &>>"$LOGFILE"
+
+VALIDATE $? "Installing NodeJS:18"
+
+id roboshop
+# shellcheck disable=SC2181
+if [ $? -ne 0 ]; then
+    useradd roboshop
+    VALIDATE $? "roboshop user creation"
+else
+    echo -e "roboshop user already exist $Y SKIPPING $N"
+fi
+
 mkdir -p /app
 
 VALIDATE $? "creating app directory"
