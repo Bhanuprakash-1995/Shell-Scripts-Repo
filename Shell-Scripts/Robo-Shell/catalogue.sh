@@ -42,7 +42,10 @@ curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zi
 
 VALIDATE $? "Downloading catalogue application"
 
-cd /app || return
+cd /app || exit
+
+echo "current path below"
+pwd
 
 unzip -o /tmp/catalogue.zip &>>"$LOGFILE"
 
