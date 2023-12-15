@@ -17,7 +17,7 @@ N="\e[0m"
 
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"$LOGFILE"
+echo "Script started executing at $TIMESTAMP" &>>$LOGFILE
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -34,30 +34,30 @@ VALIDATE() {
     fi
 }
 
-curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash &>>"$LOGFILE"
+curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash &>>$LOGFILE
 
 VALIDATE $? "Configure YUM Repo"
 
-curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash &>>"$LOGFILE"
+curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash &>>$LOGFILE
 
-VALIDATE $? "Configure YUM Repos for RabbitMQ" &>>"$LOGFILE"
+VALIDATE $? "Configure YUM Repos for RabbitMQ" &>>$LOGFILE
 
 dnf install rabbitmq-server -y
 
-VALIDATE $? "Installing RabbitMQ" &>>"$LOGFILE"
+VALIDATE $? "Installing RabbitMQ" &>>$LOGFILE
 
 systemctl enable rabbitmq-server
 
-VALIDATE $? "Enabling RabbitMQ" &>>"$LOGFILE"
+VALIDATE $? "Enabling RabbitMQ" &>>$LOGFILE
 
 systemctl start rabbitmq-server
 
-VALIDATE $? "Start RabbitMQ" &>>"$LOGFILE"
+VALIDATE $? "Start RabbitMQ" &>>$LOGFILE
 
 rabbitmqctl add_user roboshop roboshop123
 
-VALIDATE $? "Creating User & Password for RabbitMQ" &>>"$LOGFILE"
+VALIDATE $? "Creating User & Password for RabbitMQ" &>>$LOGFILE
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
 
-VALIDATE $? "Granting permission to roboshop user" &>>"$LOGFILE"
+VALIDATE $? "Granting permission to roboshop user" &>>$LOGFILE

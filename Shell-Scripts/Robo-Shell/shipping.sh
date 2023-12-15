@@ -91,7 +91,7 @@ dnf install mysql -y
 
 VALIDATE $? "Install ysql" &>>$LOGFILE
 
-mysql -h -pRoboShop@1 $MYSQL_HOST -uroot </app/schema/shipping.sql
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 </app/schema/shipping.sql
 
 VALIDATE $? "Loading the Shipping Data" &>>$LOGFILE
 
