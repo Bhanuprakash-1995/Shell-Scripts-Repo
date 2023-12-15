@@ -17,7 +17,7 @@ N="\e[0m"
 
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"$LOGFILE"
+echo "Script started executing at $TIMESTAMP" &>>$LOGFILE
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -36,24 +36,24 @@ VALIDATE() {
 
 dnf module disable mysql -y
 
-VALIDATE $? "Disabling current mysql version" &>>"$LOGFILE"
+VALIDATE $? "Disabling current mysql version" &>>$LOGFILE
 
-cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/mysql.repo /etc/yum.repos.d/mysql.repo &>>"$LOGFILE"
+cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/mysql.repo /etc/yum.repos.d/mysql.repo
 
-VALIDATE $? "Copied MySql Repo" &>>"$LOGFILE"
+VALIDATE $? "Copied MySql Repo" &>>$LOGFILE
 
 dnf install mysql-community-server -y
 
-VALIDATE $? "Install MySql Repo" &>>"$LOGFILE"
+VALIDATE $? "Install MySql Repo" &>>$LOGFILE
 
 systemctl enable mysqld
 
-VALIDATE $? "Enable MySql Repo" &>>"$LOGFILE"
+VALIDATE $? "Enable MySql Service" &>>$LOGFILE
 
 systemctl start mysqld
 
-VALIDATE $? "Start MySql Repo" &>>"$LOGFILE"
+VALIDATE $? "Start MySql Service" &>>$LOGFILE
 
 mysql_secure_installation --set-root-pass RoboShop@1
 
-VALIDATE $? "Default user and password setup" &>>"$LOGFILE"
+VALIDATE $? "Default user and password setup" &>>$LOGFILE
