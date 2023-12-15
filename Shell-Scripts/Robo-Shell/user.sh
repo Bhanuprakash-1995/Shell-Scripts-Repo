@@ -19,7 +19,7 @@ MONGDB_HOST=mongodb.roboshopapp.website
 
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"$LOGFILE"
+echo "Script started executing at $TIMESTAMP" &>>$LOGFILE
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -36,21 +36,20 @@ VALIDATE() {
     fi
 }
 
-dnf module disable nodejs -y &>>"$LOGFILE"
+dnf module disable nodejs -y &>>$LOGFILE
 
 VALIDATE $? "Disabling current NodeJS"
 
-dnf module enable nodejs:18 -y &>>"$LOGFILE"
+dnf module enable nodejs:18 -y &>>$LOGFILE
 
 VALIDATE $? "Enabling NodeJS:18"
 
-dnf install nodejs -y &>>"$LOGFILE"
+dnf install nodejs -y &>>$LOGFILE
 
 VALIDATE $? "Installing NodeJS:18"
 
 id roboshop
 
-# shellcheck disable=SC2181
 if [ $? -ne 0 ]; then
     useradd roboshop
     VALIDATE $? "roboshop user creation"
@@ -60,46 +59,46 @@ fi
 
 mkdir -p /app
 
-VALIDATE $? "creating app directory"
+VALIDATE $? "creating app directory" &>>$LOGFILE
 
 curl -L -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip
 
-VALIDATE $? "Downloading user application"
+VALIDATE $? "Downloading user application" &>>$LOGFILE
 
-cd /app || exit
+cd /app
 
-unzip -o /tmp/user.zip &>>"$LOGFILE"
+unzip -o /tmp/user.zip &>>$LOGFILE
 
 VALIDATE $? "unzipping user"
 
-npm install &>>"$LOGFILE"
+npm install &>>$LOGFILE
 
-VALIDATE $? "Installing dependencies"
+VALIDATE $? "Installing dependencies" &>>$LOGFILE
 
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/user.service /etc/systemd/system/user.service &>>"$LOGFILE"
 
-VALIDATE $? "Copying user service file"
+VALIDATE $? "Copying user service file" &>>$LOGFILE
 
-systemctl daemon-reload &>>"$LOGFILE"
+systemctl daemon-reload
 
-VALIDATE $? "user daemon reload"
+VALIDATE $? "user daemon reload" &>>$LOGFILE
 
-systemctl enable user &>>"$LOGFILE"
+systemctl enable user
 
-VALIDATE $? "Enable user"
+VALIDATE $? "Enable user" &>>$LOGFILE
 
-systemctl start user &>>"$LOGFILE"
+systemctl start user
 
-VALIDATE $? "Starting user"
+VALIDATE $? "Starting user" &>>$LOGFILE
 
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/mongo.repo /etc/yum.repos.d/mongo.repo
 
-VALIDATE $? "copying mongodb repo"
+VALIDATE $? "copying mongodb repo" &>>$LOGFILE
 
-dnf install mongodb-org-shell -y &>>"$LOGFILE"
+dnf install mongodb-org-shell -y
 
-VALIDATE $? "Installing MongoDB client"
+VALIDATE $? "Installing MongoDB client" &>>$LOGFILE
 
 mongo --host $MONGDB_HOST </app/schema/user.js
 
-VALIDATE $? "Loading user data into MongoDB"
+VALIDATE $? "Loading user data into MongoDB" &>>$LOGFILE
