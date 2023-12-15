@@ -14,7 +14,7 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
-
+MYSQL_HOST=mysql.roboshopapp.website
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
 echo "Script started executing at $TIMESTAMP" &>>$LOGFILE
@@ -84,7 +84,7 @@ dnf install mysql -y
 
 VALIDATE $? "Install ysql" &>>$LOGFILE
 
-mysql -h mysql.roboshopapp.webstie -uroot -pRoboShop@1 </app/schema/shipping.sql
+mysql -h -pRoboShop@1 $MYSQL_HOST -uroot </app/schema/shipping.sql
 
 VALIDATE $? "Loading the Shipping Data" &>>$LOGFILE
 
