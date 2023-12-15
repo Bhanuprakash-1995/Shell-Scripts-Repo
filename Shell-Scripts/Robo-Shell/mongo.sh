@@ -36,24 +36,24 @@ VALIDATE() {
 
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/mongo.repo /etc/yum.repos.d/mongo.repo &>>"$LOGPATH"
 
-VALIDATE $? "Copied MongoDB Repo"
+VALIDATE $? "Copied MongoDB Repo" &>>"$LOGPATH"
 
-dnf install mongodb-org -y &>>"$LOGPATH"
+dnf install mongodb-org -y
 
 VALIDATE $? "Installing MongoDB" &>>"$LOGPATH"
 
-systemctl enable mongod &>>"/tmp/$0-$TIMESTAMP.log"
+systemctl enable mongod
 
 VALIDATE $? "Enabling MongoDB" &>>"$LOGPATH"
 
-systemctl start mongod &>>"/tmp/$0-$TIMESTAMP.log"
+systemctl start mongod
 
-VALIDATE $? "Starting MongoDB"
+VALIDATE $? "Starting MongoDB" &>>"$LOGPATH"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>"/tmp/$0-$TIMESTAMP.log"
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 
 VALIDATE $? "Remote access to MongoDB" &>>"$LOGPATH"
 
-systemctl restart mongod &>>"/tmp/$0-$TIMESTAMP.log"
+systemctl restart mongod
 
 VALIDATE $? "Restarting MongoDB" &>>"$LOGPATH"
