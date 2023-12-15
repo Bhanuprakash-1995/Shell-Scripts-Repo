@@ -17,7 +17,7 @@ N="\e[0m"
 
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"$LOGFILE"
+echo "Script started executing at $TIMESTAMP" &>>$LOGFILE
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -34,58 +34,60 @@ VALIDATE() {
     fi
 }
 
-dnf install maven -y &>>"$LOGFILE"
+dnf install maven -y
 
-VALIDATE $? "Start MySql Repo" &>>"$LOGFILE"
+VALIDATE $? "Start MySql Repo" &>>$LOGFILE
 
 useradd roboshop
 
-VALIDATE $? "Adding Roboshop" &>>"$LOGFILE"
+VALIDATE $? "Adding Roboshop" &>>$LOGFILE
 
 mkdir /app
 
-VALIDATE $? "Creating app directory" &>>"$LOGFILE"
+VALIDATE $? "Creating app directory" &>>$LOGFILE
 
-curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>>"$LOGFILE"
+curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>>$LOGFILE
 
-VALIDATE $? "Downloading the shipping application" &>>"$LOGFILE"
+VALIDATE $? "Downloading the shipping application" &>>$LOGFILE
 
 cd /app
 
-unzip /tmp/shipping.zip &>>"$LOGFILE"
+unzip /tmp/shipping.zip &>>$LOGFILE
 
-VALIDATE $? "Unzipping shipping application in app directory" &>>"$LOGFILE"
+VALIDATE $? "Unzipping shipping application in app directory" &>>$LOGFILE
 
-mvn clean package &>>"$LOGFILE"
+cd /app
 
-VALIDATE $? "Building the shipping application" &>>"$LOGFILE"
+mvn clean package
 
-mv target/shipping-1.0.jar shipping.jar &>>"$LOGFILE"
+VALIDATE $? "Building the shipping application" &>>$LOGFILE
 
-VALIDATE $? "Renaming the zar file" &>>"$LOGFILE"
+mv target/shipping-1.0.jar shipping.jar
 
-cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/shipping.service /etc/systemd/system/shipping.service &>>"$LOGFILE"
+VALIDATE $? "Renaming the zar file" &>>$LOGFILE
+
+cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/shipping.service /etc/systemd/system/shipping.service &>>$LOGFILE
 
 systemctl daemon-reload
 
-VALIDATE $? "Shipping Service Reload" &>>"$LOGFILE"
+VALIDATE $? "Shipping Service Reload" &>>$LOGFILE
 
 systemctl enable shipping
 
-VALIDATE $? "Enable Shipping Service" &>>"$LOGFILE"
+VALIDATE $? "Enable Shipping Service" &>>$LOGFILE
 
 systemctl start shipping
 
-VALIDATE $? "Start Shipping Service" &>>"$LOGFILE"
+VALIDATE $? "Start Shipping Service" &>>$LOGFILE
 
 dnf install mysql -y
 
-VALIDATE $? "Install ysql" &>>"$LOGFILE"
+VALIDATE $? "Install ysql" &>>$LOGFILE
 
 mysql -h mysql.roboshopapp.webstie -uroot -pRoboShop@1 </app/schema/shipping.sql
 
-VALIDATE $? "Loading the Shipping Data"
+VALIDATE $? "Loading the Shipping Data" &>>$LOGFILE
 
 systemctl restart shipping
 
-VALIDATE $? "reStart Shipping Service"
+VALIDATE $? "reStart Shipping Service" &>>$LOGFILE
