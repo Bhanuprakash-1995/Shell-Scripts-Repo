@@ -17,7 +17,7 @@ N="\e[0m"
 
 LOGPATH="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"$LOGPATH"
+echo "Script started executing at $TIMESTAMP" &>>$LOGPATH
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -34,26 +34,26 @@ VALIDATE() {
     fi
 }
 
-cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/mongo.repo /etc/yum.repos.d/mongo.repo &>>"$LOGPATH"
+cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGPATH
 
-VALIDATE $? "Copied MongoDB Repo" &>>"$LOGPATH"
+VALIDATE $? "Copied MongoDB Repo" &>>$LOGPATH
 
 dnf install mongodb-org -y
 
-VALIDATE $? "Installing MongoDB" &>>"$LOGPATH"
+VALIDATE $? "Installing MongoDB" &>>$LOGPATH
 
 systemctl enable mongod
 
-VALIDATE $? "Enabling MongoDB" &>>"$LOGPATH"
+VALIDATE $? "Enabling MongoDB" &>>$LOGPATH
 
 systemctl start mongod
 
-VALIDATE $? "Starting MongoDB" &>>"$LOGPATH"
+VALIDATE $? "Starting MongoDB" &>>$LOGPATH
 
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 
-VALIDATE $? "Remote access to MongoDB" &>>"$LOGPATH"
+VALIDATE $? "Remote access to MongoDB" &>>$LOGPATH
 
 systemctl restart mongod
 
-VALIDATE $? "Restarting MongoDB" &>>"$LOGPATH"
+VALIDATE $? "Restarting MongoDB" &>>$LOGPATH
