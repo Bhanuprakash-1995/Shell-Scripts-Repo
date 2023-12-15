@@ -17,7 +17,7 @@ N="\e[0m"
 
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"$LOGFILE"
+echo "Script started executing at $TIMESTAMP" &>>$LOGFILE
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -36,42 +36,42 @@ VALIDATE() {
 
 dnf install python36 gcc python3-devel -y
 
-VALIDATE $? "Intsalling python" &>>"$LOGFILE"
+VALIDATE $? "Intsalling python" &>>$LOGFILE
 
 useradd roboshop
 
-VALIDATE $? "Creating the user" &>>"$LOGFILE"
+VALIDATE $? "Creating the user" &>>$LOGFILE
 
 mkdir /app
 
-VALIDATE $? "Create=ing Directory app" &>>"$LOGFILE"
+VALIDATE $? "Create=ing Directory app" &>>$LOGFILE
 
 curl -L -o /tmp/payment.zip https://roboshop-builds.s3.amazonaws.com/payment.zip
 
-VALIDATE $? "Downloading payment application" &>>"$LOGFILE"
+VALIDATE $? "Downloading payment application" &>>$LOGFILE
 
 cd /app
 
 unzip /tmp/payment.zip
 
-VALIDATE $? "Unzipping payment.zip" &>>"$LOGFILE"
+VALIDATE $? "Unzipping payment.zip" &>>$LOGFILE
 
 pip3.6 install -r requirements.txt
 
-VALIDATE $? "Installing application requirements" &>>"$LOGFILE"
+VALIDATE $? "Installing application requirements" &>>$LOGFILE
 
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/payment.service /etc/systemd/system/payment.service
 
-VALIDATE $? "Creating payment service" &>>"$LOGFILE"
+VALIDATE $? "Creating payment service" &>>$LOGFILE
 
 systemctl daemon-reload
 
-VALIDATE $? "Reload payment service" &>>"$LOGFILE"
+VALIDATE $? "Reload payment service" &>>$LOGFILE
 
 systemctl enable payment
 
-VALIDATE $? "Enable payment service" &>>"$LOGFILE"
+VALIDATE $? "Enable payment service" &>>$LOGFILE
 
 systemctl start payment
 
-VALIDATE $? "Start payment service" &>>"$LOGFILE"
+VALIDATE $? "Start payment service" &>>$LOGFILE
