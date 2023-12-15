@@ -2,7 +2,7 @@
 
 ######################################################
 # Author: Bhanuprakash S
-# Server name: Payment Server
+# Server name: Dispatch Server
 # Application Name: Roboshop
 # Devolepment Data: 15-12-2024
 ######################################################
@@ -34,9 +34,9 @@ VALIDATE() {
     fi
 }
 
-dnf install python36 gcc python3-devel -y
+dnf install golang -y
 
-VALIDATE $? "Intsalling python" &>>$LOGFILE
+VALIDATE $? "Installing Golang" &>>LOGFILE
 
 id roboshop
 
@@ -47,38 +47,40 @@ else
     echo -e "roboshop user already exist $Y SKIPPING $N" &>>$LOGFILE
 fi
 
-VALIDATE $? "Creating the user" &>>$LOGFILE
+VALIDATE $? "Create user roboshop" &>>LOGFILE
 
 mkdir /app
 
-VALIDATE $? "Create=ing Directory app" &>>$LOGFILE
+curl -L -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip
 
-curl -L -o /tmp/payment.zip https://roboshop-builds.s3.amazonaws.com/payment.zip
-
-VALIDATE $? "Downloading payment application" &>>$LOGFILE
+VALIDATE $? "Downloading dispatch applicaiton" &>>LOGFILE
 
 cd /app
 
-unzip /tmp/payment.zip
+unzip /tmp/dispatch.zip
 
-VALIDATE $? "Unzipping payment.zip" &>>$LOGFILE
+VALIDATE $? "Unzipping the dispatch applicaiton file" &>>LOGFILE
 
-pip3.6 install -r requirements.txt
+cd /app
 
-VALIDATE $? "Installing application requirements" &>>$LOGFILE
+go mod init dispatch
 
-cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/payment.service /etc/systemd/system/payment.service
+go get
 
-VALIDATE $? "Creating payment service" &>>$LOGFILE
+go build
+
+VALIDATE $? "Golang Build" &>>LOGFILE
+
+cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/dispatch.service /etc/systemd/system/dispatch.service
 
 systemctl daemon-reload
 
-VALIDATE $? "Reload payment service" &>>$LOGFILE
+VALIDATE $? " Dispatch Service Daemon Reload" &>>LOGFILE
 
-systemctl enable payment
+systemctl enable dispatch
 
-VALIDATE $? "Enable payment service" &>>$LOGFILE
+VALIDATE $? "Enable Dispatch Service" &>>LOGFILE
 
-systemctl start payment
+systemctl start dispatch
 
-VALIDATE $? "Start payment service" &>>$LOGFILE
+VALIDATE $? "Start Dispatch Service" &>>LOGFILE
