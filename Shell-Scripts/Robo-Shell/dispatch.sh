@@ -47,19 +47,19 @@ else
     echo -e "roboshop user already exist $Y SKIPPING $N" &>>$LOGFILE
 fi
 
-VALIDATE $? "Create user roboshop" &>>LOGFILE
+VALIDATE $? "Create user roboshop" &>>$LOGFILE
 
 mkdir /app
 
 curl -L -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip
 
-VALIDATE $? "Downloading dispatch applicaiton" &>>LOGFILE
+VALIDATE $? "Downloading dispatch applicaiton" &>>$LOGFILE
 
 cd /app
 
 unzip /tmp/dispatch.zip
 
-VALIDATE $? "Unzipping the dispatch applicaiton file" &>>LOGFILE
+VALIDATE $? "Unzipping the dispatch applicaiton file" &>>$LOGFILE
 
 cd /app
 
@@ -69,18 +69,18 @@ go get
 
 go build
 
-VALIDATE $? "Golang Build" &>>LOGFILE
+VALIDATE $? "Golang Build" &>>$LOGFILE
 
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/dispatch.service /etc/systemd/system/dispatch.service
 
 systemctl daemon-reload
 
-VALIDATE $? " Dispatch Service Daemon Reload" &>>LOGFILE
+VALIDATE $? " Dispatch Service Daemon Reload" &>>$LOGFILE
 
 systemctl enable dispatch
 
-VALIDATE $? "Enable Dispatch Service" &>>LOGFILE
+VALIDATE $? "Enable Dispatch Service" &>>$LOGFILE
 
 systemctl start dispatch
 
-VALIDATE $? "Start Dispatch Service" &>>LOGFILE
+VALIDATE $? "Start Dispatch Service" &>>$LOGFILE
