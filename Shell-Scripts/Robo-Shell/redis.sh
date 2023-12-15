@@ -53,7 +53,7 @@ dnf install redis -y &>>"$LOGFILE"
 
 VALIDATE $? "Redis Installation" >>"$LOGFILE"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis.conf >>"$LOGFILE"
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis/redis.conf >>"$LOGFILE"
 
 echo "Enabling the redis"
 

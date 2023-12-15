@@ -15,9 +15,9 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-#LOG_PATH="/tmp/$0-$TIMESTAMP.log"
+LOGPATH="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"/tmp/$0-$TIMESTAMP.log"
+echo "Script started executing at $TIMESTAMP" &>>"$LOGPATH"
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -34,23 +34,17 @@ VALIDATE() {
     fi
 }
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo &>>"/tmp/$0-$TIMESTAMP.log"
+cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/mongo.repo /etc/yum.repos.d/mongo.repo &>>"$LOGPATH"
 
 VALIDATE $? "Copied MongoDB Repo"
 
-echo "Installing MongoDB"
+dnf install mongodb-org -y &>>"$LOGPATH"
 
-dnf install mongodb-org -y &>>"/tmp/$0-$TIMESTAMP.log"
-
-VALIDATE $? "Installing MongoDB"
-
-echo "Enabling the mongod"
+VALIDATE $? "Installing MongoDB" &>>"$LOGPATH"
 
 systemctl enable mongod &>>"/tmp/$0-$TIMESTAMP.log"
 
-VALIDATE $? "Enabling MongoDB"
-
-echo "Start the mongod service"
+VALIDATE $? "Enabling MongoDB" &>>"$LOGPATH"
 
 systemctl start mongod &>>"/tmp/$0-$TIMESTAMP.log"
 
@@ -58,10 +52,8 @@ VALIDATE $? "Starting MongoDB"
 
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>"/tmp/$0-$TIMESTAMP.log"
 
-VALIDATE $? "Remote access to MongoDB"
-
-echo "reStart the mongod"
+VALIDATE $? "Remote access to MongoDB" &>>"$LOGPATH"
 
 systemctl restart mongod &>>"/tmp/$0-$TIMESTAMP.log"
 
-VALIDATE $? "Restarting MongoDB"
+VALIDATE $? "Restarting MongoDB" &>>"$LOGPATH"

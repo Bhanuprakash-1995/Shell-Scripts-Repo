@@ -15,8 +15,6 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-#MONGDB_HOST=mongodb.roboshopapp.website
-
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
 echo "Script started executing at $TIMESTAMP" &>>"$LOGFILE"
@@ -62,34 +60,30 @@ mkdir -p /app
 
 VALIDATE $? "creating app directory"
 
-curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip
+curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip &>>"$LOGFILE"
 
 VALIDATE $? "Downloading cart application"
 
-cd /app || exit
+cd /app
 
 unzip -o /tmp/cart.zip &>>"$LOGFILE"
 
 VALIDATE $? "unzipping cart"
 
-cd /app || exit
-
 npm install &>>"$LOGFILE"
-
-VALIDATE $? "Installing dependencies"
 
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/cart.service /etc/systemd/system/cart.service &>>"$LOGFILE"
 
-VALIDATE $? "Copying cart service file"
+VALIDATE $? "Cart Service"
 
 systemctl daemon-reload
 
-VALIDATE $? "cart daemon reload"
+VALIDATE $? "Daemon-reload cart Service"
 
-systemctl enable cart &>>"$LOGFILE"
+systemctl enable cart
 
-VALIDATE $? "Enable cart"
+VALIDATE $? "Enable cart Service"
 
-systemctl start cart &>>"$LOGFILE"
+systemctl start cart
 
-VALIDATE $? "Starting cart"
+VALIDATE $? "Start cart Service"

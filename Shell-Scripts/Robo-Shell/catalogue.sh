@@ -34,43 +34,42 @@ VALIDATE() {
     fi
 }
 
-dnf module disable nodejs -y &>>"$LOGFILE"
+dnf module disable nodejs -y
 
-VALIDATE $? "Disabling current NodeJS"
+VALIDATE $? "Disabling current NodeJS" &>>"$LOGFILE"
 
-dnf module enable nodejs:18 -y &>>"$LOGFILE"
+dnf module enable nodejs:18 -y
 
-VALIDATE $? "Enabling NodeJS:18"
+VALIDATE $? "Enabling NodeJS:18" &>>"$LOGFILE"
 
-dnf install nodejs -y &>>"$LOGFILE"
+dnf install nodejs -y
 
-VALIDATE $? "Installing NodeJS:18"
+VALIDATE $? "Installing NodeJS:18" &>>"$LOGFILE"
 
 id roboshop
 
-# shellcheck disable=SC2181
 if [ $? -ne 0 ]; then
     useradd roboshop
-    VALIDATE $? "roboshop user creation"
+    VALIDATE $? "roboshop user creation" &>>"$LOGFILE"
 else
-    echo -e "roboshop user already exist $Y SKIPPING $N"
+    echo -e "roboshop user already exist $Y SKIPPING $N" &>>"$LOGFILE"
 fi
 
 mkdir -p /app
 
-VALIDATE $? "creating app directory"
+VALIDATE $? "creating app directory" &>>"$LOGFILE"
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>"$LOGFILE"
 
-VALIDATE $? "Downloading catalogue application"
+VALIDATE $? "Downloading catalogue application" &>>"$LOGFILE"
 
 cd /app || exit
 
-unzip -o /tmp/catalogue.zip &>>"$LOGFILE"
+unzip -o /tmp/catalogue.zip
 
-VALIDATE $? "unzipping catalogue"
+VALIDATE $? "unzipping catalogue" &>>"$LOGFILE"
 
-npm install &>>"$LOGFILE"
+npm install
 
 VALIDATE $? "Installing dependencies"
 
@@ -78,25 +77,26 @@ cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/catalogue.service /e
 
 VALIDATE $? "Copying catalogue service file"
 
-systemctl daemon-reload &>>"$LOGFILE"
+systemctl daemon-reload
 
-VALIDATE $? "catalogue daemon reload"
+VALIDATE $? "catalogue daemon reload" &>>"$LOGFILE"
 
-systemctl enable catalogue &>>"$LOGFILE"
+systemctl enable catalogue
 
-VALIDATE $? "Enable catalogue"
+VALIDATE $? "Enable catalogue" &>>"$LOGFILE"
 
-systemctl start catalogue &>>"$LOGFILE"
+systemctl start catalogue
 
-VALIDATE $? "Starting catalogue"
+VALIDATE $? "Starting catalogue" &>>"$LOGFILE"
+
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/mongo.repo /etc/yum.repos.d/mongo.repo
 
-VALIDATE $? "copying mongodb repo"
+VALIDATE $? "copying mongodb repo" &>>"$LOGFILE"
 
-dnf install mongodb-org-shell -y &>>"$LOGFILE"
+dnf install mongodb-org-shell -y
 
-VALIDATE $? "Installing MongoDB client"
+VALIDATE $? "Installing MongoDB client" &>>"$LOGFILE"
 
-mongo --host $MONGDB_HOST </app/schema/catalogue.js &>>"$LOGFILE"
+mongo --host $MONGDB_HOST </app/schema/catalogue.js
 
-VALIDATE $? "Loading catalouge data into MongoDB"
+VALIDATE $? "Loading catalouge data into MongoDB" &>>"$LOGFILE"
