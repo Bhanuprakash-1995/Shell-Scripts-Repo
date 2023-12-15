@@ -42,7 +42,7 @@ useradd roboshop
 
 VALIDATE $? "Adding Roboshop" &>>$LOGFILE
 
-mkdir /app
+mkdir - p /app
 
 VALIDATE $? "Creating app directory" &>>$LOGFILE
 
