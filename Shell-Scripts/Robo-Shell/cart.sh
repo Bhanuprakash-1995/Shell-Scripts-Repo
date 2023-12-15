@@ -71,6 +71,8 @@ VALIDATE $? "unzipping cart" &>>$LOGFILE
 
 npm install
 
+VALIDATE $? "Installing Dependices" &>>$LOGFILE
+
 cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/cart.service /etc/systemd/system/cart.service
 
 systemctl daemon-reload
