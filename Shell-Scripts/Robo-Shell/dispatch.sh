@@ -49,7 +49,7 @@ fi
 
 VALIDATE $? "Create user roboshop" &>>$LOGFILE
 
-mkdir /app
+mkdir -p /app
 
 curl -L -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip
 
@@ -57,7 +57,7 @@ VALIDATE $? "Downloading dispatch applicaiton" &>>$LOGFILE
 
 cd /app
 
-unzip /tmp/dispatch.zip
+unzip -o /tmp/dispatch.zip
 
 VALIDATE $? "Unzipping the dispatch applicaiton file" &>>$LOGFILE
 

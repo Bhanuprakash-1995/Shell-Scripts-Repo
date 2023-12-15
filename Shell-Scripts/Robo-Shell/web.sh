@@ -17,7 +17,7 @@ N="\e[0m"
 #MONGDB_HOST=mongodb.roboshopapp.website
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"$LOGFILE"
+echo "Script started executing at $TIMESTAMP" &>>$LOGFILE
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -34,54 +34,34 @@ VALIDATE() {
     fi
 }
 
-# shellcheck disable=SC2129
-echo "Installing the nginx" &>>"$LOGFILE"
+dnf install nginx -y
 
-dnf install nginx -y &>>"$LOGFILE"
+VALIDATE $? "Install nginx" &>>$LOGFILE
 
-VALIDATE $? "Install nginx"
+systemctl enable nginx
 
-# shellcheck disable=SC2129
-echo "Enabling the nginx" &>>"$LOGFILE"
+VALIDATE $? "Enable nginx" &>>$LOGFILE
 
-systemctl enable nginx &>>"$LOGFILE"
+systemctl start nginx
 
-VALIDATE $? "Enable nginx"
+VALIDATE $? "Start nginx" &>>$LOGFILE
 
-echo "Start the nginx" &>>"$LOGFILE"
+rm -rf /usr/share/nginx/html/* &>>$LOGFILE
 
-systemctl start nginx &>>"$LOGFILE"
-
-VALIDATE $? "Start nginx"
-
-echo "Removind all default html" &>>"$LOGFILE"
-
-rm -rf /usr/share/nginx/html/*
-
-VALIDATE $? "Removing  all default html"
-
-echo "Download the frontend content" &>>"$LOGFILE"
+VALIDATE $? "Removing  all default html" &>>$LOGFILE
 
 curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip
 
-echo "Changing the working directory to /usr/share/nginx/html" &>>"$LOGFILE"
+cd /usr/share/nginx/html
 
-cd /usr/share/nginx/html || exit
+unzip -o /tmp/web.zip &>>$LOGFILE
 
-echo "Unzipping the /tmp/web.zip" &>>"$LOGFILE"
+VALIDATE $? "Unzipping all Roboshop html file" &>>$LOGFILE
 
-unzip -o /tmp/web.zip
+cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>$LOGFILE
 
-VALIDATE $? "Unzipping all Roboshop html file"
+VALIDATE $? "Coping the reverse proxy configuration file" &>>$LOGFILE
 
-echo "Coping the reverse proxy file to /etc/nginx/" &>>"$LOGFILE"
+systemctl restart nginx
 
-cp //home/centos/Shell-Scripts-Repo/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>"$LOGFILE"
-
-VALIDATE $? "Coping the reverse proxy configuration file"
-
-echo "reStarting nginx server " &>>"$LOGFILE"
-
-systemctl restart nginx &>>"$LOGFILE"
-
-VALIDATE $? "reStart nginx server"
+VALIDATE $? "reStart nginx server" &>>$LOGFILE
