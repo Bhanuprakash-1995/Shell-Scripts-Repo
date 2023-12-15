@@ -38,9 +38,16 @@ dnf install maven -y
 
 VALIDATE $? "Start MySql Repo" &>>$LOGFILE
 
-useradd roboshop
+id roboshop
 
-VALIDATE $? "Adding Roboshop" &>>$LOGFILE
+if [ $? -ne 0 ]; then
+    useradd roboshop
+    VALIDATE $? "roboshop user creation" &>>$LOGFILE
+else
+    echo -e "roboshop user already exist $Y SKIPPING $N" &>>$LOGFILE
+fi
+
+VALIDATE $? "Adding Roboshop User" &>>$LOGFILE
 
 mkdir -p /app
 
