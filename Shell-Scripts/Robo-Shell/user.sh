@@ -75,7 +75,7 @@ npm install &>>$LOGFILE
 
 VALIDATE $? "Installing dependencies" &>>$LOGFILE
 
-cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/user.service /etc/systemd/system/user.service &>>"$LOGFILE"
+cp /home/centos/Shell-Scripts-Repo/Shell-Scripts/Robo-Shell/user.service /etc/systemd/system/user.service
 
 VALIDATE $? "Copying user service file" &>>$LOGFILE
 
