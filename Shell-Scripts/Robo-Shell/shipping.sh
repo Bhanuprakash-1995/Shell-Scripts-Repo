@@ -59,7 +59,7 @@ VALIDATE $? "Downloading the shipping application" &>>$LOGFILE
 
 cd /app
 
-unzip /tmp/shipping.zip &>>$LOGFILE
+unzip -o /tmp/shipping.zip &>>$LOGFILE
 
 VALIDATE $? "Unzipping shipping application in app directory" &>>$LOGFILE
 
