@@ -17,7 +17,7 @@ N="\e[0m"
 #MONGDB_HOST=mongodb.roboshopapp.website
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
 
-echo "Script started executing at $TIMESTAMP" &>>"$LOGFILE"
+echo "Script started executing at $TIMESTAMP" &>>$LOGFILE
 
 if [ "$ID" -ne 0 ]; then
     echo -e "$R ERROR:: Please run this script with root access $N"
@@ -36,33 +36,24 @@ VALIDATE() {
 
 echo "Installing the redis from Repo file"
 
-# shellcheck disable=SC2129
-dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &>>"$LOGFILE"
+dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y
 
-VALIDATE $? "Redis Repo Installation" &>>"$LOGFILE"
+VALIDATE $? "Redis Repo Installation" &>>$LOGFILE
 
-echo "Enabling the module redis:remi-6.2 from package streams" &>>"$LOGFILE"
+dnf module enable redis:remi-6.2 -y
 
-dnf module enable redis:remi-6.2 -y &>>"$LOGFILE"
+VALIDATE $? "Enabling the redis:remi-6.2" &>>$LOGFILE
 
-VALIDATE $? "Enabling the redis:remi-6.2" &>>"$LOGFILE"
+dnf install redis -y
 
-echo "Installing the redis" &>>"$LOGFILE"
+VALIDATE $? "Redis Installation" >>$LOGFILE
 
-dnf install redis -y &>>"$LOGFILE"
-
-VALIDATE $? "Redis Installation" >>"$LOGFILE"
-
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis/redis.conf >>"$LOGFILE"
-
-echo "Enabling the redis"
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis/redis.conf >>$LOGFILE
 
 systemctl enable redis
 
-VALIDATE $? "Redis Enable" >>"$LOGFILE"
-
-echo "Start the redis"
+VALIDATE $? "Redis Enable" >>$LOGFILE
 
 systemctl start redis
 
-VALIDATE $? "Start Redis" >>"$LOGFILE"
+VALIDATE $? "Start Redis" >>$LOGFILE
