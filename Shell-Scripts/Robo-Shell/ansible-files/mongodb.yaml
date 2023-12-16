@@ -1,0 +1,36 @@
+---
+- name: Create MongoDB repository configuration file
+  hosts: mongodb
+  become: yes
+  tasks:
+    - name: Generate MongoDB repository template
+      copy:
+        content: |
+          [mongodb-org-4.2]
+          name=MongoDB Repository
+          baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.2/x86_64/
+          gpgcheck=0
+          enabled=1
+        dest: /etc/yum.repos.d/mongo.repo
+
+    - name: Install MongoDB
+      package:
+        name: mongodb-org
+        state: present
+
+    - name: Enable and start MongoDB service
+      systemd:
+        name: mongod
+        state: started
+        enabled: yes
+
+    - name: Replace IP address in the file
+      replace:
+        path: /etc/mongod.conf # Specify the path to your file
+        regexp: "127.0.0.1" # Regular expression to match the IP address
+        replace: "0.0.0.0" # The replacement string
+
+    - name: Restart MongoDB
+      systemd:
+        name: mongod
+        state: restarted

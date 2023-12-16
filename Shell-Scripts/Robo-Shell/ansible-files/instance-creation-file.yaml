@@ -1,22 +1,21 @@
 - hosts: localhost
   gather_facts: False
   tasks:
-    - name: Create key pair
-      ec2_key:
-        name: web-key-pair
-        region: us-east-1
-      register: keyout
+    # - name: Create key pair
+    #   ec2_key:
+    #     name: web-key-pair-target
+    #     region: us-east-1
+    #   register: keyout
 
-    - name: save key
-      copy:
-        content: "{{ keyout.key.private_key }}"
-        dest: ./sample-key-pair.pem
-      when: keyout.changed == True
+    # - name: save key
+    #   copy:
+    #     content: "{{ keyout.key.private_key }}"
+    #     dest: ./sample-key-pair.pem
+    #   when: keyout.changed == True
 
     - name: start an instance
       amazon.aws.ec2_instance:
-        name: "web"
-        key_name: "web-key-pair"
+        name: "web-target-machine"
         instance_type: t2.micro
         security_group: allow all
         image_id: ami-03265a0778a880afb

@@ -19,10 +19,31 @@
         state: started
         enabled: yes
 
-    - name: Delete files in /usr/share/nginx/html/
+    - name: Find and delete files inside html directory
+      find:
+        paths: "/usr/share/nginx/html/"
+        file_type: file
+      register: html_files
+
+    - name: Remove found files
       file:
-        path: "/usr/share/nginx/html/"
+        path: "{{ item.path }}"
         state: absent
+      with_items: "{{ html_files.files }}"
+
+    - name: Download file using curl
+      ansible.builtin.command: "curl -o /usr/share/nginx/html/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip"
+
+    - name: Execute command in /usr/nginx/html
+      ansible.builtin.command: "ls -la"
+      args:
+        chdir: "/usr/share/nginx/html"
+
+    - name: Unzip web.zip
+      ansible.builtin.unarchive:
+        src: "/usr/share/nginx/html/web.zip"
+        dest: "/usr/share/nginx/html/"
+        remote_src: yes
 
     - name: Start Nginx service
       service:
