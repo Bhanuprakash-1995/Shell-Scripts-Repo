@@ -13,3 +13,45 @@
       user:
         name: roboshop
         state: present
+
+    - name: Create directory
+      file:
+        path: /app
+        state: directory
+
+    - name: Download file using curl
+      ansible.builtin.command: "curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip"
+
+    - name: Change working directory to /app
+      ansible.builtin.command: "ls -la"
+      args:
+        chdir: "/app"
+
+    - name: Unzip catalogue.zip
+      ansible.builtin.unarchive:
+        src: "/tmp/catalogue.zip"
+        dest: "/app"
+        remote_src: yes
+
+    - name: Install Node.js package using npm
+      npm:
+        path: /app # Replace with your project's directory
+        global: no # Set to yes if installing globally
+        executable: npm
+
+    - name: Create Catalogue service file
+      copy:
+        content: |
+          [Unit]
+          Description=Catalogue microservice
+
+          [Service]
+          User=roboshop
+          Environment="MONGO=true"
+          Environment="MONGO_URL=mongodb://mongodb.roboshopapp.website:27017/catalogue"
+          ExecStart=/bin/node /app/server.js
+          SyslogIdentifier=catalogue
+          Restart=always
+          [Install]
+          WantedBy=multi-user.target
+      dest: /etc/systemd/system/catalogue.service
