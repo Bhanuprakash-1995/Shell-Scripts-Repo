@@ -1,0 +1,31 @@
+- name: Install Nginx on CentOS
+  hosts: web01
+  become: yes
+
+  tasks:
+    - name: Install EPEL repository (Extra Packages for Enterprise Linux)
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Delete files in /usr/share/nginx/html/
+      file:
+        path: "/usr/share/nginx/html/"
+        state: absent
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
