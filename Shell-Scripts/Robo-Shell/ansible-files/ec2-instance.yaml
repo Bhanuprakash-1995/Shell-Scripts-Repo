@@ -1,0 +1,26 @@
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    # - name: Create key pair
+    #   ec2_key:
+    #     name: web-key-pair-target
+    #     region: us-east-1
+    #   register: keyout
+
+    # - name: save key
+    #   copy:
+    #     content: "{{ keyout.key.private_key }}"
+    #     dest: ./sample-key-pair.pem
+    #   when: keyout.changed == True
+
+    - name: start an instance
+      amazon.aws.ec2_instance:
+        name: "catalogue-target-machine"
+        instance_type: t2.micro
+        security_group: allow all
+        key_name: target
+        image_id: ami-03265a0778a880afb
+        tags:
+          Environment: Web
+        exact_count: 1
+        region: us-east-1
