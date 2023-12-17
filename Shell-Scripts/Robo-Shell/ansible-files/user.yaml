@@ -1,0 +1,76 @@
+---
+- name: Install Node.js 18 and setup Catalogue service
+  hosts: user
+  become: yes
+  tasks:
+    - name: Install Node.js 18 using dnf
+      dnf:
+        name: nodejs
+        state: present
+        enablerepo: nodesource
+
+    - name: Add roboshop user
+      user:
+        name: roboshop
+        state: present
+
+    - name: Create directory
+      file:
+        path: /app
+        state: directory
+
+    - name: Download file using curl
+      command: "curl -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip"
+
+    - name: Change working directory to /app
+      command: "ls -la"
+      args:
+        chdir: "/app"
+
+    - name: Unzip user.zip
+      unarchive:
+        src: "/tmp/user.zip"
+        dest: "/app"
+        remote_src: yes
+
+    - name: Install Node.js packages using npm
+      npm:
+        path: /app # Replace with your project's directory
+        global: no
+        executable: npm
+
+    - name: Create Catalogue service file
+      copy:
+        content: |
+          [Unit]
+          Description = User Service
+          [Service]
+          User=roboshop
+          Environment=MONGO=true
+          Environment=REDIS_HOST=redis.roboshopapp.website
+          Environment=MONGO_URL="mongodb://mongodb.roboshopapp.website:27017/users"
+          ExecStart=/bin/node /app/server.js
+          SyslogIdentifier=user
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/user.service
+        owner: root
+        group: root
+        mode: "0644"
+      notify:
+        - Reload systemd
+
+    - name: Enable user service
+      systemd:
+        name: user.service
+        enabled: yes
+        state: started
+    - name: Run MongoDB command
+      command: "mongo --host 172.31.89.29 /app/schema/user.js"
+
+  handlers:
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+        state: reloaded
+        name: catalogue.service
