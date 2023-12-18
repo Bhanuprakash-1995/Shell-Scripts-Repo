@@ -13,25 +13,21 @@ fi
 
 if [ -d "$SOURCE_DIR" ]; then
     if [ "$ACTION" = "delete" ]; then
-        FILES_TO_FIND=$(find "$SOURCE_DIR" -type f -mtime +$DAYS_TO_DELETE_OR_ARCHIVE -name "*.log")
-        FILE_COUNT=$(echo "$FILES_TO_FIND" | wc -l)
-        if [ "$FILE_COUNT" -gt 0 ]; then
-            while IFS= read -r line; do
-                echo -e "Deleting file: $line"
-                rm -rf "$line"
-            done <<<"$FILES_TO_FIND"
+        FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -mtime +$DAYS_TO_DELETE_OR_ARCHIVE -name "*.log")
+        if [ -n "$FILES_TO_DELETE" ]; then
+            echo "Deleting files older than $DAYS_TO_DELETE_OR_ARCHIVE days:"
+            echo "$FILES_TO_DELETE" | while IFS= read -r file; do
+                echo "Deleting file: $file"
+                rm -f "$file"
+            done
         else
             echo "No files found to delete."
         fi
     elif [ "$ACTION" = "archive" ]; then
-        mkdir -p "$DESTINATION"
-        FILES_TO_FIND=$(find "$SOURCE_DIR" -type f -mtime +$DAYS_TO_DELETE_OR_ARCHIVE -name "*.log")
-        FILE_COUNT=$(echo "$FILES_TO_FIND" | wc -l)
-        if [ "$FILE_COUNT" -gt 0 ]; then
-            # tar -czvf "$DESTINATION/archive_files.tar.gz" $FILES_TO_FIND
-            while IFS= read -r line; do
-                tar -czvf "$DESTINATION/archive_files.tar.gz" $line
-            done <<<"$FILES_TO_FIND"
+        FILES_TO_ARCHIVE=$(find "$SOURCE_DIR" -type f -mtime +$DAYS_TO_DELETE_OR_ARCHIVE -name "*.log")
+        if [ -n "$FILES_TO_ARCHIVE" ]; then
+            mkdir -p "$DESTINATION"
+            tar -czvf "$DESTINATION/archive_files.tar.gz" $FILES_TO_ARCHIVE
         else
             echo "No files found to archive."
         fi
