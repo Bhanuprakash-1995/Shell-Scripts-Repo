@@ -11,7 +11,7 @@ Y="\e[33m"
 N="\e[0m"
 
 # Use DAYS_TO_DELETE in your file deletion operation
-if [ $ACTION == "delete" ] && [ -z $SOURCE_DIR ]; then
+if [ $ACTION == "delete" ]; then
     FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -name "*.log" -mtime +"$DAYS_TO_DELETE")
     echo "$FILES_TO_DELETE files to delete"
     echo "User chose to delete the files older than $DAYS_TO_DELETE days"
