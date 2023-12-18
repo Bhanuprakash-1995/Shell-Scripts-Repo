@@ -11,3 +11,5 @@ systemctl restart postfix
 systemctl enable postfix 
 
 smtp runs at port : 587
+
+touch /etc/postfix/sasl_passwd
