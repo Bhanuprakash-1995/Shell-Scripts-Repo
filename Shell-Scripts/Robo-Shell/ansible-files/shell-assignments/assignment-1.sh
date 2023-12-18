@@ -14,7 +14,7 @@ else
     echo -e "$SOURCE_DIR exsits"
 fi
 
-FILES_TO_FIND=$(find $SOURCE_DIR -type f -mtime -name "*.log")
+FILES_TO_FIND=$(find $SOURCE_DIR -type f -name "*.log")
 
 if [ $ACTION == "delete" ]; then
     echo "User Choosen to delete the files"
