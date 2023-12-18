@@ -10,17 +10,8 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-if [ ! -d $SOURCE_DIR ]; then
-    echo -e "$R $SOURCE_DIR Does not exsits"
-    exit 1
-else
-    echo -e "$SOURCE_DIR exsits"
-fi
-
-# Rest of your script
-
 # Use DAYS_TO_DELETE in your file deletion operation
-if [ "$ACTION" == "delete" ]; then
+if [ $ACTION == "delete" ] && [ -z $SOURCE_DIR ] && [ -d $SOURCE_DIR ]; then
     FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -name "*.log" -mtime +"$DAYS_TO_DELETE")
     echo "$FILES_TO_DELETE files to delete"
     echo "User chose to delete the files older than $DAYS_TO_DELETE days"
