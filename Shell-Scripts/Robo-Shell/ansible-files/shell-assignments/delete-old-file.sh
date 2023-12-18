@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOURCE_DIR="/tmp/sell-scripts"
+SOURCE_DIR="/tmp/shell-scripts"
 
 R="\e[31m"
 G="\e[32m"
