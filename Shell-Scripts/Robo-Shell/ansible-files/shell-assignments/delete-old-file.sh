@@ -7,3 +7,6 @@ if [ ! -d $SOURCE_DIR ]; then
 else
     echo -e "$SOURCE_DIR exsits"
 fi
+
+FILES_TO_FIND=$(find $SOURCE_DIR -type f -mtime +14 -name "*.log")
+echo "List of filet to delete: $FILES_TO_FIND"
