@@ -21,7 +21,7 @@ else
 fi
 
 if [ -d "$SOURCE_DIR" ] && [ "$ACTION" = "archive" ]; then
-    mkdir -d $DESTINATION
+    mkdir -p $DESTINATION
     FILES_TO_FIND=$(find $SOURCE_DIR -type f -mtime +$DAYS_TO_DELETE -name "*.log")
     FILE_COUNT=$(echo "$FILES_TO_FIND" | wc -l)
     if [ "$FILE_COUNT" -gt 0 ]; then
