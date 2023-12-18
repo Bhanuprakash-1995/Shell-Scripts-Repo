@@ -1,7 +1,7 @@
 #!/bin/bash
 SOURCE_DIR=$1
 ACTION=$2
-OLD_DATA_TIME=${14:-"default_action"}
+DAYS_TO_DELETE=${1:-$DEFAULT_DAYS_TO_DELETE}
 # echo "$@ these are the arguments passed"
 
 R="\e[31m"
@@ -17,8 +17,8 @@ else
 fi
 
 if [ "$ACTION" == "delete" ]; then
-    FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -mtime +$OLD_DATA_TIME -name "*.log")
-    echo "User chose to delete the files"
+    FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -mtime +$DAYS_TO_DELETE -name "*.log")
+    echo "User chose to delete the files older than $DAYS_TO_DELETE days"
     if [ -n "$FILES_TO_DELETE" ]; then
         while IFS= read -r line; do
             echo -e "Deleting file: $line"
