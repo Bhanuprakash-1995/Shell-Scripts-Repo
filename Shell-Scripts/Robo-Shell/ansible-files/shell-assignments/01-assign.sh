@@ -21,6 +21,6 @@ else
 fi
 
 if [ -d "$SOURCE_DIR" ] && [ "$ACTION" = "archive" ]; then
-    mkdir -p $DESTINATION
+    print "***********"
 
 fi
