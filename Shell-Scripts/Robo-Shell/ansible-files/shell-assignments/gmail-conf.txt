@@ -1,0 +1,13 @@
+sudo su -
+
+yum -y install postfix cyrus-sasl-plain mailx
+
+postfix --> Hits gmail API
+cyrus-sasl-plain --> Authentication setup
+mailx--> command to send email
+
+systemctl restart postfix 
+
+systemctl enable postfix 
+
+smtp runs at port : 587

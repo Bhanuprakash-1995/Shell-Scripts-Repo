@@ -13,3 +13,5 @@ while IFS= read line; do
 done <<<$DISK_USAGE
 
 echo -e "Message: $message"
+
+echo "$message" | mail -s "message" bhanupadhu21071995@gmail.com
