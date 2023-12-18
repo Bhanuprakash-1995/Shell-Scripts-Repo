@@ -3,8 +3,8 @@
 SOURCE_DIR=$1
 ACTION=$2
 DEFAULT_DAYS_TO_DELETE=14
-DAYS_TO_DELETE_OR_ARCHIVE=${4:-$DEFAULT_DAYS_TO_DELETE}
-DESTINATION=$3
+DAYS_TO_DELETE_OR_ARCHIVE=${3:-$DEFAULT_DAYS_TO_DELETE}
+DESTINATION=$4
 
 if [ -z "$DESTINATION" ] && [ "$ACTION" = "archive" ]; then
     echo "Destination argument is mandatory for 'archive' action."
@@ -26,8 +26,15 @@ if [ -d "$SOURCE_DIR" ]; then
     elif [ "$ACTION" = "archive" ]; then
         FILES_TO_ARCHIVE=$(find "$SOURCE_DIR" -type f -mtime +$DAYS_TO_DELETE_OR_ARCHIVE -name "*.log")
         if [ -n "$FILES_TO_ARCHIVE" ]; then
+            # Create a temporary file to store the list of files to archive
+            TEMP_FILE=$(mktemp /tmp/files_to_archive.XXXXXX)
+            echo "$FILES_TO_ARCHIVE" >"$TEMP_FILE"
+
             mkdir -p "$DESTINATION"
-            tar -czvf "$DESTINATION/archive_files.tar.gz" -C "$SOURCE_DIR" --files-from <(echo "$FILES_TO_ARCHIVE")
+            tar -czvf "$DESTINATION/archive_files.tar.gz" -C "$SOURCE_DIR" -T "$TEMP_FILE"
+
+            # Clean up the temporary file
+            rm -f "$TEMP_FILE"
         else
             echo "No files found to archive."
         fi
