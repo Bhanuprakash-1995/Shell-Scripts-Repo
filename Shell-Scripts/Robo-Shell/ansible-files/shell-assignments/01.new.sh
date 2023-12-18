@@ -28,7 +28,10 @@ if [ -d "$SOURCE_DIR" ]; then
         FILES_TO_FIND=$(find "$SOURCE_DIR" -type f -mtime +$DAYS_TO_DELETE_OR_ARCHIVE -name "*.log")
         FILE_COUNT=$(echo "$FILES_TO_FIND" | wc -l)
         if [ "$FILE_COUNT" -gt 0 ]; then
-            tar -czvf "$DESTINATION/archive_files.tar.gz" $FILES_TO_FIND
+            # tar -czvf "$DESTINATION/archive_files.tar.gz" $FILES_TO_FIND
+            while IFS= read -r line; do
+                tar -czvf "$DESTINATION/archive_files.tar.gz" $line
+            done <<<"$FILES_TO_FIND"
         else
             echo "No files found to archive."
         fi
