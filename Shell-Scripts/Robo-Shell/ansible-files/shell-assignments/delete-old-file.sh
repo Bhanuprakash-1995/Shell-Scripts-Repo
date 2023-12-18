@@ -15,6 +15,10 @@ else
 fi
 
 FILES_TO_FIND=$(find $SOURCE_DIR -type f -mtime +14 -name "*.log")
+
+if [ ! $FILES_TO_FIND ]; then
+    echo "There no file to delete"
+fi
 echo "List of filet to delete: $FILES_TO_FIND"
 
 while IFS= read -r line; do
