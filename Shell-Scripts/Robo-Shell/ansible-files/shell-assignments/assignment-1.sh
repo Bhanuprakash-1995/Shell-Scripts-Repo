@@ -16,16 +16,18 @@ else
     echo -e "$SOURCE_DIR exsits"
 fi
 
-if [ $ACTION == "delete" ]; then
-    FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -name "*.log" -mtime +$DAYS_TO_DELETE)
-    if [ $FILES_TO_DELETE -gt 0 ]; then
+if [ "$ACTION" == "delete" ]; then
+    FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -name "*.log" -mtime +"$DAYS_TO_DELETE")
+
+    # Count the number of files found
+    FILE_COUNT=$(echo "$FILES_TO_DELETE" | wc -l)
+
+    if [ "$FILE_COUNT" -gt 0 ]; then
         echo "User chose to delete the files older than $DAYS_TO_DELETE days"
-        if [ -n "$FILES_TO_DELETE" ]; then
-            while IFS= read -r line; do
-                echo -e "Deleting file: $line"
-                rm -rf "$line"
-            done <<<"$FILES_TO_DELETE"
-        fi
+        echo "$FILES_TO_DELETE" | while IFS= read -r line; do
+            echo -e "Deleting file: $line"
+            rm -rf "$line"
+        done
     else
         echo "No file to delete for provided duration"
         exit 1
