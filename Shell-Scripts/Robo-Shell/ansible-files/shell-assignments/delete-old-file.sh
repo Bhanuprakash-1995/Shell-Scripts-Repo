@@ -1,7 +1,9 @@
 #!/bin/bash
 
-SOURSE_DIR="/tmp/shell-scripts"
+SOURCE_DIR="/tmp/shell-scripts"
 
-if [ ! -d $SOURSE_DIR ]; then
-    echo -e "$SOURSE_DIR Does not exsits"
+if [ ! -d $SOURCE_DIR ]; then
+    echo -e "$SOURCE_DIR Does not exsits"
+else
+    echo -e "$SOURCE_DIR exsits"
 fi
