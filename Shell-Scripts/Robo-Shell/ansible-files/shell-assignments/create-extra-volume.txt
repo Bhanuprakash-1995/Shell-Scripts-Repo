@@ -1,0 +1,34 @@
+How to create extra volum to running instance.
+
+#To check volume
+lsblk ---> listing block devices
+
+sudo lsblk -f --> command to get information about all the devices attached to instance
+
+#Creat the a xvdf filesystem in /dev folder
+
+1. sudo file -s /dev/xvdf
+
+2. sudo mkfs -t xfs /dev/xvdf
+
+#Create data folder in root 
+3. mkdir /data
+
+#mount the /dev/xvdf to folder /data
+4. sudo mount /dev/xvdf /data
+
+You can find the new hard using below command:
+dh -hT
+---------------------------------------------------
+Below command:
+df -hT | grep -v tmp ---> output the lines which does not 
+                          contains the "tmp" string (Called as reverse search)
+
+
+df -hT | grep -ivE 'tmp|file' --> outputs the lines 
+                                  which does'nt have "tmp" and "file" string in the line
+
+
+awk '{print $6F}'--->below awk command takes the 6th fragment from the grep output 
+cut -d % -f1 ---> cuts or deletes the "%" in the fragment f1
+df -hT | grep -ivE 'tmp|file' | awk '{print $6F}' | cut -d % -f1
