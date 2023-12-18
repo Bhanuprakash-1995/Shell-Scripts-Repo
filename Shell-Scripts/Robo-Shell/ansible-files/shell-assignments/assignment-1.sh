@@ -26,7 +26,7 @@ if [ "$ACTION" == "delete" ]; then
         echo "$FILES_TO_DELETE" | while IFS= read -r line; do
             echo -e "Deleting file: $line"
             rm -rf "$line"
-        done
+        done <<<$FILES_TO_DELETE
     else
         echo "No file to delete for provided duration"
         exit 1
