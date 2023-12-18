@@ -17,7 +17,7 @@ fi
 FILES_TO_FIND=$(find $SOURCE_DIR -type f -mtime +14 -name "*.log")
 
 if [ ! $FILES_TO_FIND ]; then
-    echo "There no file to delete"
+    echo "There no files to delete"
     exit 1
 else
     echo "List of filet to delete: $FILES_TO_FIND"
