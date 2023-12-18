@@ -23,7 +23,6 @@ if [ "$ACTION" == "delete" ]; then
     FILE_COUNT=$(echo "$FILES_TO_DELETE" | wc -l)
 
     if [ "$FILE_COUNT" -gt 0 ]; then
-        echo "User chose to delete the files older than $DAYS_TO_DELETE days"
         echo "$FILES_TO_DELETE" | while IFS= read -r line; do
             echo -e "Deleting file: $line"
             rm -rf "$line"
