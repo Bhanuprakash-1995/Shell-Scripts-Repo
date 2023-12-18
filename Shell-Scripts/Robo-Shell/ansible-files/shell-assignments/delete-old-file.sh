@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOURCE_DIR="/tmp/shell-scripts"
+SOURCE_DIR="/tmp/sell-scripts"
 
 R="\e[31m"
 G="\e[32m"
@@ -9,6 +9,7 @@ N="\e[0m"
 
 if [ ! -d $SOURCE_DIR ]; then
     echo -e "$R $SOURCE_DIR Does not exsits"
+    exit 1
 else
     echo -e "$SOURCE_DIR exsits"
 fi
