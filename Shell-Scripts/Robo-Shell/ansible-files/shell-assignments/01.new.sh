@@ -3,8 +3,8 @@
 SOURCE_DIR=$1
 ACTION=$2
 DEFAULT_DAYS_TO_DELETE=14
-DAYS_TO_DELETE_OR_ARCHIVE=${4:-$DEFAULT_DAYS_TO_DELETE}
-DESTINATION=$3
+DAYS_TO_DELETE_OR_ARCHIVE=${3:-$DEFAULT_DAYS_TO_DELETE}
+DESTINATION=$4
 
 if [ -z "$DESTINATION" ] && [ "$ACTION" = "archive" ]; then
     echo "Destination argument is mandatory for 'archive' action."
