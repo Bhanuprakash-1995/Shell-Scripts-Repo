@@ -1,7 +1,7 @@
 #!/bin/bash
 SOURCE_DIR=$1
 ACTION=$2
-echo "$@ these are the arguments passed"
+# echo "$@ these are the arguments passed"
 
 R="\e[31m"
 G="\e[32m"
@@ -15,12 +15,13 @@ else
     echo -e "$SOURCE_DIR exsits"
 fi
 
-FILES_TO_FIND=$(find $SOURCE_DIR -type f -name "*.log")
-
-if [ $ACTION == "delete" ]; then
-    echo "User Choosen to delete the files"
-    while IFS= read -r line; do
-        echo -e "Deleting file: $line"
-        rm -rf $line
-    done <<<$FILES_TO_FIND
+if [ "$ACTION" == "delete" ]; then
+    FILES_TO_DELETE=$(find $SOURCE_DIR -type f -name "*.log")
+    echo "User chose to delete the files"
+    if [ $FILES_TO_DELETE ]; then
+        while IFS= read -r line; do
+            echo -e "Deleting file: $line"
+            rm -rf "$line"
+        done <<<"$FILES_TO_DELETE"
+    fi
 fi
