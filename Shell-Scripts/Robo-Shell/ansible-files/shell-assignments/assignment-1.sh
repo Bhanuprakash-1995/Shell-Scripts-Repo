@@ -22,7 +22,7 @@ fi
 # fi
 
 if [ "$ACTION" == "delete" ]; then
-    FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -mtime +$DAYS_TO_DELETE -name "*.log")
+    FILES_TO_DELETE=$(find "$SOURCE_DIR" -type f -mtime +"$DAYS_TO_DELETE" -name "*.log")
     echo "User chose to delete the files older than $DAYS_TO_DELETE days"
     if [ -n "$FILES_TO_DELETE" ]; then
         while IFS= read -r line; do
