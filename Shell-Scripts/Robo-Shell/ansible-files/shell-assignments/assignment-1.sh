@@ -1,6 +1,7 @@
 #!/bin/bash
 SOURCE_DIR=$1
 ACTION=$2
+echo "$@ these are the arguments passed"
 
 R="\e[31m"
 G="\e[32m"
