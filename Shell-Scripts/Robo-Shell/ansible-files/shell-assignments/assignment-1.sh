@@ -31,3 +31,5 @@ if [ "$ACTION" == "delete" ]; then
         done <<<"$FILES_TO_DELETE"
     fi
 fi
+
+#/tmp/shell-scripts
