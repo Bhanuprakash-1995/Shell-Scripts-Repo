@@ -3,7 +3,7 @@
 TO_TEAM=$1
 ALERT_TYPE=$2
 BODY=$3
-ESCAPE_BODY=$(printf "s%\n" "$BODY" | sed -e "s/[]\/$*.^[]/\\&/g")
+ESCAPE_BODY=$(printf 's%\n' "$BODY" | sed -e 's/[]\/$*.^[]/\\&/g')
 TO_ADDRESS=$4
 SUBJECT=$5
 
