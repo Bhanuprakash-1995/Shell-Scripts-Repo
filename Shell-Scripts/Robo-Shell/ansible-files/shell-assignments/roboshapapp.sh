@@ -7,6 +7,7 @@ INSTANCE=("mongodb" "redis" "catalogue" "shipping" "web" "mysql" "payment" "disp
 aws ec2 run-instances --image-id ami-03265a0778a880afb --count 1 --instance-type t2.micro --security-group-ids sg-0170a2c37d33656c2
 
 for i in "${INSTANCE[@]}"; do
+    echo "Instance is: $i"
     if [ $i == "momngodb" ] || [ $i == "mysql" ] || [ $i == "shipping" ]; then
         INSTANCE_TYPE="t3.small"
     else
