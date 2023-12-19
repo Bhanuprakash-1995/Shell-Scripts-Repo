@@ -1,26 +1,22 @@
 #!/bin/bash
 
 NAME=""
-WISHES=""
+WISHES="Good Morning"
 
 USAGE() {
-    echo "Usage:: $(basename "$0") -n <name> -w <wishes>"
+    echo "USGAE:: $(basename $0) -n <name> -w <wishes>"
     echo "Options::"
-    echo "-n, specify the name (mandatory)"
-    echo "-w, specify the wishes, ex, Good morning"
-    echo "-h, Dsiplay help and exit"
+    echo " -n, Specify the name (mandatory)"
+    echo " -w, Specify the wishes. (Optional). Default is Good Morning"
+    echo " -h, Display Help and exit"
 }
 
-while getopts "n:w:h" opt; do
+while getopts ":n:w:h" opt; do
     case $opt in
-    n) Name="$OPTARG" ;;
+    n) NAME="$OPTARG" ;;
     w) WISHES="$OPTARG" ;;
     \?)
-        echo "Invaild options:-"$OPTARG"" >&2
-        USAGE
-        exit
-        ;;
-    h)
+        echo "invalid options: -"$OPTARG"" >&2
         USAGE
         exit
         ;;
@@ -28,13 +24,19 @@ while getopts "n:w:h" opt; do
         USAGE
         exit
         ;;
+    h)
+        USAGE
+        exit
+        ;;
     esac
 done
 
-if [ -z $NAME ] || [ -z $WISHES ]; then
-    echo "Error: Bothe -n and -w are mandatory options."
+#if [ -z "$NAME" ] || [ -z "$WISHES" ]; then
+if [ -z "$NAME" ]; then # now wishes is optional
+    #echo "ERROR: Both -n and -w are mandatory options."
+    echo "ERROR: -n is mandatory."
     USAGE
     exit 1
 fi
 
-echo "Hello $NAME. $WISHES. I have been learnig Devops "
+echo "Hello $NAME. $WISHES. I have been learning Shell Script."
