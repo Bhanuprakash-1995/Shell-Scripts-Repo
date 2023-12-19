@@ -15,9 +15,26 @@ while getopts "n:w:h" opt; do
     case $opt in
     n) Name="$OPTARG" ;;
     w) WISHES="$OPTARG" ;;
-    h | *)
+    \?)
+        echo "Invaild options:-"$OPTARG"" >&2
+        USAGE
+        exit
+        ;;
+    h)
+        USAGE
+        exit
+        ;;
+    :)
         USAGE
         exit
         ;;
     esac
 done
+
+if [ -z $NAME ] || [ -z $WISHES ]; then
+    echo "Error: Bothe -n and -w are mandatory options."
+    USAGE
+    exist 1
+fi
+
+echo "Hello $NAME. $WISHES. I have been learnig Devops "
