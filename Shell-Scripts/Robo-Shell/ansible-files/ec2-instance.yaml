@@ -17,10 +17,10 @@
       amazon.aws.ec2_instance:
         name: "catalogue-target-machine"
         instance_type: t2.micro
-        security_group: allow all
+        security_group: sg-0170a2c37d33656c2
         key_name: target
         image_id: ami-03265a0778a880afb
         tags:
           Environment: Web
         exact_count: 1
-        region: us-east-1
+        region: us-east-1c
