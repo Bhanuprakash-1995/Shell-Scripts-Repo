@@ -14,6 +14,6 @@ for i in "${INSTANCE[@]}"; do
         INSTANCE_TYPE="t2.micro"
     fi
 
-    aws ec2 run-instances --image-id ami-03265a0778a880afb --count 1 --instance-type $INSTANCE_TYPE --security-group-ids sg-0170a2c37d33656c2
+    aws ec2 run-instances --image-id ami-03265a0778a880afb --count 1 --instance-type $INSTANCE_TYPE --security-group-ids sg-0170a2c37d33656c2 --tag-specifications "ResourceType=instance, Tags=[{key=Name,Value=$i}]"
 
 done
