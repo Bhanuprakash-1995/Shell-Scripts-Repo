@@ -34,7 +34,7 @@ done
 if [ -z $NAME ] || [ -z $WISHES ]; then
     echo "Error: Bothe -n and -w are mandatory options."
     USAGE
-    exist 1
+    exit 1
 fi
 
 echo "Hello $NAME. $WISHES. I have been learnig Devops "
