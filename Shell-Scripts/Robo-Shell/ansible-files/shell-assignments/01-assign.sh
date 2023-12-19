@@ -19,8 +19,3 @@ else
     echo "Directory doesn't exist."
     exit 1
 fi
-
-if [ -d "$SOURCE_DIR" ] && [ "$ACTION" = "archive" ]; then
-    print "***********"
-
-fi
